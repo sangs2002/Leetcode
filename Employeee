@@ -1,0 +1,442 @@
+//using EmployeesProject2.Domain.Model;
+//using EmployeesProject2.Domain.Services;
+//using Microsoft.AspNetCore.Mvc;
+
+//namespace EmployeesProject2.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class EmployeeController : ControllerBase
+//    {
+//        private readonly IEmployee _employeeService;
+
+//        public EmployeeController(IEmployee employeeService)
+//        {
+//            _employeeService = employeeService;
+//        }
+
+//        [HttpGet]
+//        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
+//        {
+//            var employees = await _employeeService.GetAll();
+//            return Ok(employees);
+//        }
+
+//        [HttpGet("{id}")]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+
+//        public async Task<ActionResult<Employee>> GetEmployeeById(int id)//
+//        {
+//            var employee = await _employeeService.GetById(id);
+//            if (employee == null)
+//            {
+//                return NotFound();
+//            }
+//            return Ok(employee);
+//        }
+
+
+
+//        [HttpGet("position")]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        public async Task<ActionResult<List<Employee>>> GetEmployeesByPosition(string position)
+//        {
+//            var employees = await _employeeService.GetByPosition(position);
+//            if (employees == null || employees.Count == 0)
+//            {
+//                return NotFound();
+//            }
+//            return employees;
+//        }
+
+//        [HttpPost]
+//        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+//        {
+//            string experience = CalculateExperience(employee.DateOfJoining);
+//            employee.Experience = experience;
+
+//            await _employeeService.Create(employee);
+
+//            return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
+//        }
+
+
+//        private string CalculateExperience(DateTime dateOfJoining)
+//        {
+//            DateTime currentDate = DateTime.Today;
+
+//            DateTime adjustedJoiningDate = dateOfJoining;
+
+//            int years = currentDate.Year - adjustedJoiningDate.Year;
+//            int months = currentDate.Month - adjustedJoiningDate.Month;
+
+//            if (currentDate.Day < adjustedJoiningDate.Day)
+//            {
+//                months--;
+//            }
+
+//            if (months < 0)
+//            {
+//                years--;
+//                months += 12;
+//            }
+
+//            if (years > 0 && months > 0)
+//            {
+//                return $"{years} years {months} months";
+//            }
+//            else if (years > 0)
+//            {
+//                return $"{years} years";
+//            }
+//            else
+//            {
+//                return $"{months} months";
+//            }
+//        }
+
+
+
+
+
+//        [HttpPut("{id}")]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+//        {
+//            if (id != employee.Id)
+//            {
+//                return BadRequest("Employee ID mismatch");
+//            }
+
+
+//            await _employeeService.Update(employee);
+//            return NoContent();
+
+
+//        }
+
+//        [HttpDelete("{id}")]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        public async Task<ActionResult> DeleteEmployee(int id)
+//        {
+//            await _employeeService.Delete(id);
+//            return NoContent();
+
+//        }
+
+//    }
+//}
+
+
+
+
+
+//using EmployeesProject2.Domain.Model;
+//using EmployeesProject2.Domain.Services;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
+//using System;
+//using System.Collections.Generic;
+//using System.Threading.Tasks;
+
+//namespace EmployeesProject2.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class EmployeeController : ControllerBase
+//    {
+//        private readonly IEmployee _employeeService;
+
+//        public EmployeeController(IEmployee employeeService)
+//        {
+//            _employeeService = employeeService;
+//        }
+
+//        [HttpGet]
+//        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
+//        {
+//            var employees = await _employeeService.GetAll();
+//            return Ok(employees);
+//        }
+
+//        [HttpGet("{id}")]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        public async Task<ActionResult<Employee>> GetEmployeeById(int id)
+//        {
+//            var employee = await _employeeService.GetById(id);
+//            if (employee == null)
+//            {
+//                return NotFound();
+//            }
+//            return Ok(employee);
+//        }
+
+//        [HttpGet("position")]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        public async Task<ActionResult<List<Employee>>> GetEmployeesByPosition(string position)
+//        {
+//            var employees = await _employeeService.GetByPosition(position);
+//            if (employees == null || employees.Count == 0)
+//            {
+//                return NotFound();
+//            }
+//            return employees;
+//        }
+
+//        [HttpPost]
+//        [ProducesResponseType(StatusCodes.Status201Created)]
+//        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+//        {
+//            string experience = CalculateExperience(employee.DateOfJoining);
+//            employee.Experience = experience;
+
+//            await _employeeService.Create(employee);
+
+//            return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
+//        }
+
+//        private string CalculateExperience(DateTime dateOfJoining)
+//        {
+//            DateTime currentDate = DateTime.Today;
+
+//            DateTime adjustedJoiningDate = dateOfJoining;
+
+//            int years = currentDate.Year - adjustedJoiningDate.Year;
+//            int months = currentDate.Month - adjustedJoiningDate.Month;
+
+//            if (currentDate.Day < adjustedJoiningDate.Day)
+//            {
+//                months--;
+//            }
+
+//            if (months < 0)
+//            {
+//                years--;
+//                months += 12;
+//            }
+
+//            if (years > 0 && months > 0)
+//            {
+//                return $"{years} years {months} months";
+//            }
+//            else if (years > 0)
+//            {
+//                return $"{years} years";
+//            }
+//            else
+//            {
+//                return $"{months} months";
+//            }
+//        }
+
+//        [HttpPut("{id}")]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+//        public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+//        {
+//            if (id != employee.Id)
+//            {
+//                return BadRequest("Employee ID mismatch");
+//            }
+
+//            await _employeeService.Update(employee);
+//            return NoContent();
+//        }
+
+//        [HttpDelete("{id}")]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        public async Task<ActionResult> DeleteEmployee(int id)
+//        {
+//            await _employeeService.Delete(id);
+//            return NoContent();
+//        }
+//    }
+//}
+
+//using EmployeesProject2.Domain.Model;
+//using EmployeesProject2.Domain.Services;
+//using Microsoft.AspNetCore.Mvc;
+
+
+//namespace EmployeeDetails.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class EmployeeController : ControllerBase
+//    {
+//        private readonly IEmployee _employeeService;
+
+//        public EmployeeController(IEmployee employeeService)
+//        {
+//            _employeeService = employeeService;
+//        }
+
+//        [HttpGet]
+//        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
+//        {
+//            var employees = await _employeeService.GetAll();
+//            return Ok(employees);
+//        }
+
+//        [HttpGet("{id}")]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        public async Task<ActionResult<Employee>> GetEmployeeById(int id)
+//        {
+//            var employee = await _employeeService.GetById(id);
+//            if (employee == null)
+//            {
+//                return NotFound();
+//            }
+//            return Ok(employee);
+//        }
+
+//        [HttpGet("position")]
+//        [ProducesResponseType(StatusCodes.Status404NotFound)]
+//        [ProducesResponseType(StatusCodes.Status200OK)]
+//        public async Task<ActionResult<List<Employee>>> GetEmployeesByPosition(string position)
+//        {
+//            var employees = await _employeeService.GetByPosition(position);
+//            if (employees == null || employees.Count == 0)
+//            {
+//                return NotFound();
+//            }
+//            return employees;
+//        }
+
+//        [HttpPost]
+//        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+//        {
+//            employee.Experience = CalculateExperience(employee.DateOfJoining);
+//            await _employeeService.Create(employee);
+//            return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
+//        }
+
+//        private string CalculateExperience(DateTime dateOfJoining)
+//        {
+//            TimeSpan experience = DateTime.Today - dateOfJoining;
+//            int years = experience.Days / 365;
+//            int months = (experience.Days % 365) / 30;
+//            return $"{years} years {months} months";
+//        }
+
+//        [HttpPut("{id}")]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+//        {
+//            if (id != employee.Id)
+//            {
+//                return BadRequest("Employee ID mismatch");
+//            }
+
+//            await _employeeService.Update(employee);
+//            return NoContent();
+//        }
+
+//        [HttpDelete("{id}")]
+//        [ProducesResponseType(StatusCodes.Status204NoContent)]
+//        public async Task<ActionResult> DeleteEmployee(int id)
+//        {
+//            await _employeeService.Delete(id);
+//            return NoContent();
+//        }
+//    }
+//}
+
+using Microsoft.AspNetCore.Mvc;
+//using EmployeesProject2.Domain.Model;
+using EmployeesProject2.Domain.Services;
+using System.Diagnostics.CodeAnalysis;
+using EmployeesProject2.Domain.Model;
+
+namespace EmployeeDetails.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+   // [ExcludeFromCodeCoverage]
+    public class EmployeeController : ControllerBase
+    {
+        private readonly IEmployee _employeeService;
+
+        public EmployeeController(IEmployee employeeService)
+        {
+            _employeeService = employeeService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
+        {
+            var employees = await _employeeService.GetAll();
+            return Ok(employees);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Employee>> GetEmployeeById(int id)
+        {
+            var employee = await _employeeService.GetById(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            return Ok(employee);
+        }
+
+        [HttpGet("position")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<Employee>>> GetEmployeesByPosition(string position)
+        {
+            var employees = await _employeeService.GetByPosition(position);
+            if (employees == null || employees.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(employees);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Employee>> CreateEmployee(Employee employee)
+        {
+            employee.Experience = CalculateExperience(employee.DateOfJoining);
+            await _employeeService.Create(employee);
+            return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
+        }
+
+        private string CalculateExperience(DateTime dateOfJoining)
+        {
+            TimeSpan experience = DateTime.Today - dateOfJoining;
+            int years = experience.Days / 365;
+            int months = (experience.Days % 365) / 30;
+            return $"{years} years {months} months";
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+        {
+            var existingEmployee = await _employeeService.GetById(id);
+            if (existingEmployee == null)
+            {
+                return NotFound();
+            }
+
+            await _employeeService.Update(employee);
+            return NoContent(); // Return NoContentResult
+        }
+
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteEmployee(int id)
+        {
+            await _employeeService.Delete(id);
+            return NoContent();
+        }
+    }
+}
